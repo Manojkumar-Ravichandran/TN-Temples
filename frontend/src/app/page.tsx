@@ -13,14 +13,14 @@ export default function Home() {
   return (
     <PublicLayout>
       {/* Hero Section */}
-      <section className="relative min-h-screen flex flex-col items-center justify-center pt-32 pb-20 px-6 overflow-hidden bg-dot-pattern">
+      <section className="relative min-h-[500px] flex flex-col items-center justify-center pt-40 pb-24 px-6 overflow-hidden bg-dot-pattern">
         {/* Background Gradients */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-full pointer-events-none">
           <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/20 blur-[120px] rounded-full" />
           <div className="absolute bottom-[10%] right-[-10%] w-[30%] h-[30%] bg-red-600/10 blur-[100px] rounded-full" />
         </div>
 
-        <div className="relative z-10 text-center max-w-4xl mx-auto">
+        <div className="relative z-10 text-center max-w-8xl mx-auto">
           <h1 className="text-5xl md:text-8xl font-black text-foreground mb-6 tracking-tighter leading-[0.9]">
             Discover the Divine Heritage <br />
             of <span className="text-orange-gradient">Tamil Nadu</span>
@@ -53,7 +53,7 @@ export default function Home() {
         </div>
       </section>
 
-      <div className="container mx-auto px-6 space-y-32 pb-32">
+      <div className="container mx-auto px-6 space-y-20 pb-32">
         {/* Featured Temples */}
         <section>
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-12 gap-6">
