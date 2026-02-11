@@ -23,22 +23,22 @@ const Sidebar: React.FC<SidebarProps> = ({ role }) => {
         ];
 
     return (
-        <aside className="w-64 bg-gray-900 text-white min-h-screen p-6 hidden lg:block">
+        <aside className="w-64 bg-secondary-bg text-foreground min-h-screen p-6 hidden lg:block border-r border-border">
             <div className="mb-10">
-                <Link href="/" className="text-xl font-bold text-orange-500">TN Temples</Link>
-                <p className="text-xs text-gray-400 mt-1 uppercase tracking-widest">{role} Panel</p>
+                <Link href="/" className="text-xl font-bold text-primary">TN Temples</Link>
+                <p className="text-xs text-muted-foreground mt-1 uppercase tracking-widest">{role} Panel</p>
             </div>
             <nav className="flex flex-col gap-4">
                 {links.map((link) => (
                     <Link
                         key={link.name}
                         href={link.href}
-                        className="text-gray-300 hover:text-white hover:bg-gray-800 px-4 py-2 rounded-lg transition-all"
+                        className="text-muted-foreground hover:text-foreground hover:bg-accent/10 px-4 py-2 rounded-lg transition-all"
                     >
                         {link.name}
                     </Link>
                 ))}
-                <button className="text-left py-2 text-red-400 hover:text-red-300 font-bold transition-colors mt-10">
+                <button className="text-left py-2 text-error hover:text-error/80 font-bold transition-colors mt-10">
                     Logout
                 </button>
             </nav>

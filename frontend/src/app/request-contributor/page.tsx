@@ -25,7 +25,7 @@ export default function RequestContributor() {
         <PublicLayout>
             <div className="max-w-2xl mx-auto py-12 px-6">
                 <div className="text-center mb-12">
-                    <h1 className="text-4xl font-extrabold text-orange-900 mb-4">Request Contributor Access</h1>
+                    <h1 className="text-4xl font-extrabold text-primary mb-4">Request Contributor Access</h1>
                     <p className="text-gray-600">
                         Join our mission to document every temple in Tamil Nadu. As a contributor, you can add new temples, suggest edits, and earn points.
                     </p>
@@ -75,7 +75,7 @@ export default function RequestContributor() {
                             <textarea
                                 rows={4}
                                 placeholder="Tell us about your interest in temple heritage..."
-                                className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                                className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
                                 value={formData.reason}
                                 onChange={(e) => setFormData({ ...formData, reason: e.target.value })}
                             ></textarea>

@@ -72,11 +72,11 @@ export default function NearbyTemples() {
                         <h2 className="text-3xl font-bold mb-4">Planning a pilgrimage?</h2>
                         <p className="text-gray-400 text-lg mb-8">Access detailed routes, festival schedules, and pooja timings for over 50,000 temples across the state.</p>
                         <div className="flex gap-4">
-                            <Button label="Browse Map" variant="primary" className="bg-orange-600" />
+                            <Button label="Browse Map" variant="primary" />
                             <Button label="Festival Calendar" variant="outline" className="border-white text-white hover:bg-white hover:text-gray-900" />
                         </div>
                     </div>
-                    <div className="absolute top-0 right-0 w-1/3 h-full bg-orange-600 opacity-20 transform skew-x-12 translate-x-20"></div>
+                    <div className="absolute top-0 right-0 w-1/3 h-full bg-primary opacity-20 transform skew-x-12 translate-x-20"></div>
                 </div>
             </div>
         </PublicLayout>

@@ -30,7 +30,7 @@ const TempleDetail = ({ params }: { params: { slug: string } }) => {
             <div className="max-w-6xl mx-auto py-8">
                 {/* Breadcrumb */}
                 <div className="flex gap-2 text-sm text-gray-400 mb-6">
-                    <span>Home</span> / <span>District</span> / <span>{temple.district}</span> / <span className="text-orange-600 font-medium">{temple.name}</span>
+                    <span>Home</span> / <span>District</span> / <span>{temple.district}</span> / <span className="text-primary font-medium">{temple.name}</span>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
@@ -47,7 +47,7 @@ const TempleDetail = ({ params }: { params: { slug: string } }) => {
                             <Badge text={temple.district} variant="info" className="text-sm px-3 py-1" />
                         </div>
 
-                        <div className="prose prose-orange max-w-none">
+                        <div className="prose prose-neutral dark:prose-invert max-w-none">
                             <h2 className="text-2xl font-bold mb-4">Temple History</h2>
                             <p className="text-gray-700 leading-relaxed mb-8">{temple.history}</p>
 
@@ -57,9 +57,9 @@ const TempleDetail = ({ params }: { params: { slug: string } }) => {
                             <h2 className="text-2xl font-bold mb-4">Festivals</h2>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
                                 {temple.festivals.map(f => (
-                                    <div key={f.name} className="bg-orange-50 p-4 rounded-xl border border-orange-100">
-                                        <h3 className="font-bold text-orange-900">{f.name}</h3>
-                                        <p className="text-sm text-orange-700">{f.month}</p>
+                                    <div key={f.name} className="bg-primary/5 p-4 rounded-xl border border-primary/10">
+                                        <h3 className="font-bold text-primary">{f.name}</h3>
+                                        <p className="text-sm text-primary/70">{f.month}</p>
                                     </div>
                                 ))}
                             </div>
@@ -95,10 +95,10 @@ const TempleDetail = ({ params }: { params: { slug: string } }) => {
                             <Button label="Get Directions" className="w-full" />
                         </div>
 
-                        <div className="bg-orange-600 text-white p-6 rounded-3xl shadow-lg">
+                        <div className="bg-primary text-white p-6 rounded-3xl shadow-lg">
                             <h3 className="text-xl font-bold mb-2">Help us improve!</h3>
                             <p className="text-sm opacity-90 mb-4">Notice something wrong? Suggest an edit to keep our information accurate.</p>
-                            <Button label="Suggest Edit" variant="outline" className="w-full border-white text-white hover:bg-white hover:text-orange-600" />
+                            <Button label="Suggest Edit" variant="outline" className="w-full border-white text-white hover:bg-white hover:text-primary" />
                         </div>
                     </div>
                 </div>

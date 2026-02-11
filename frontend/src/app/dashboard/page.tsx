@@ -8,9 +8,9 @@ import Button from '@/components/atoms/Button';
 
 export default function ContributorDashboard() {
     const stats = [
-        { label: 'Total Submissions', value: '12', color: 'bg-blue-500' },
-        { label: 'Approved', value: '8', color: 'bg-green-500' },
-        { label: 'Points Earned', value: '450', color: 'bg-orange-500' },
+        { label: 'Total Submissions', value: '12', color: 'bg-info' },
+        { label: 'Approved', value: '8', color: 'bg-success' },
+        { label: 'Points Earned', value: '450', color: 'bg-primary' },
     ];
 
     const recentActivity = [
@@ -46,7 +46,7 @@ export default function ContributorDashboard() {
                 <div className="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden">
                     <div className="p-6 border-b flex justify-between items-center">
                         <h2 className="text-xl font-bold text-gray-900">Recent Submissions</h2>
-                        <button className="text-orange-600 font-bold hover:underline">View All</button>
+                        <button className="text-primary font-bold hover:underline">View All</button>
                     </div>
                     <div className="overflow-x-auto">
                         <table className="w-full text-left">
@@ -72,7 +72,7 @@ export default function ContributorDashboard() {
                                             />
                                         </td>
                                         <td className="px-6 py-4">
-                                            <button className="text-gray-400 hover:text-orange-600 transition-colors">Details</button>
+                                            <button className="text-gray-400 hover:text-primary transition-colors">Details</button>
                                         </td>
                                     </tr>
                                 ))}
@@ -83,13 +83,13 @@ export default function ContributorDashboard() {
 
                 {/* Helpful Tips Section */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12">
-                    <div className="bg-orange-50 border border-orange-100 p-8 rounded-3xl">
-                        <h3 className="text-xl font-bold text-orange-900 mb-2">Pro Tip: Images Matter!</h3>
-                        <p className="text-orange-800 opacity-80">Submissions with clear photos of the Gopuram and main deity are 3x more likely to be approved quickly.</p>
+                    <div className="bg-primary/5 border border-primary/10 p-8 rounded-3xl">
+                        <h3 className="text-xl font-bold text-primary mb-2">Pro Tip: Images Matter!</h3>
+                        <p className="text-primary/80">Submissions with clear photos of the Gopuram and main deity are 3x more likely to be approved quickly.</p>
                     </div>
-                    <div className="bg-blue-50 border border-blue-100 p-8 rounded-3xl">
-                        <h3 className="text-xl font-bold text-blue-900 mb-2">Earn Trusted Badge</h3>
-                        <p className="text-blue-800 opacity-80">Once you have 10 approved submissions, you'll be promoted to Trusted Contributor automatically!</p>
+                    <div className="bg-info/5 border border-info/10 p-8 rounded-3xl">
+                        <h3 className="text-xl font-bold text-info mb-2">Earn Trusted Badge</h3>
+                        <p className="text-info/80">Once you have 10 approved submissions, you'll be promoted to Trusted Contributor automatically!</p>
                     </div>
                 </div>
             </div>

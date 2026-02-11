@@ -86,20 +86,20 @@ export default function Login() {
                             label={loading ? "Authenticating..." : "Login to Portal"}
                             type="submit"
                             disabled={loading}
-                            className="w-full py-4 text-lg font-bold shadow-lg shadow-orange-200"
+                            className="w-full py-4 text-lg font-bold shadow-lg shadow-primary/20"
                         />
 
                         <div className="text-center mt-6">
                             <p className="text-sm text-gray-400">
-                                Don't have access? <a href="/request-contributor" className="text-orange-600 font-bold hover:underline">Request Contributor Access</a>
+                                Don't have access? <a href="/request-contributor" className="text-primary font-bold hover:underline">Request Contributor Access</a>
                             </p>
                         </div>
                     </form>
                 </div>
 
                 {/* Quick Help for User */}
-                <div className="mt-8 text-center bg-orange-50 p-4 rounded-2xl border border-orange-100">
-                    <p className="text-xs text-orange-800">
+                <div className="mt-8 text-center bg-primary/5 p-4 rounded-2xl border border-primary/10">
+                    <p className="text-xs text-primary">
                         <b>Admin Login:</b> admin@tntemples.com / password123
                     </p>
                 </div>

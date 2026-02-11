@@ -7,9 +7,9 @@ import Badge from '@/components/atoms/Badge';
 
 export default function AdminDashboard() {
     const stats = [
-        { label: 'Pending Approvals', value: '5', color: 'bg-red-500' },
-        { label: 'Total Temples', value: '42,103', color: 'bg-orange-500' },
-        { label: 'Active Contributors', value: '156', color: 'bg-blue-500' },
+        { label: 'Pending Approvals', value: '5', color: 'bg-error' },
+        { label: 'Total Temples', value: '42,103', color: 'bg-primary' },
+        { label: 'Active Contributors', value: '156', color: 'bg-info' },
     ];
 
     const pendingSubmissions = [
@@ -41,8 +41,8 @@ export default function AdminDashboard() {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     {/* Pending Approvals */}
                     <div className="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden">
-                        <div className="p-6 border-b bg-red-50 flex justify-between items-center">
-                            <h2 className="text-xl font-bold text-red-900">Pending Approvals</h2>
+                        <div className="p-6 border-b bg-error/5 flex justify-between items-center">
+                            <h2 className="text-xl font-bold text-error">Pending Approvals</h2>
                             <Badge text="Action Required" variant="error" />
                         </div>
                         <div className="divide-y">
@@ -65,19 +65,19 @@ export default function AdminDashboard() {
                     <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-8">
                         <h2 className="text-xl font-bold text-gray-900 mb-6">Quick Management</h2>
                         <div className="grid grid-cols-2 gap-4">
-                            <button className="flex flex-col items-center justify-center p-6 bg-gray-50 rounded-2xl border border-gray-100 hover:border-orange-200 hover:bg-orange-50 transition-all group">
+                            <button className="flex flex-col items-center justify-center p-6 bg-gray-50 rounded-2xl border border-gray-100 hover:border-primary/20 hover:bg-primary/5 transition-all group">
                                 <span className="text-2xl mb-2 group-hover:scale-110 transition-transform">➕</span>
                                 <span className="font-bold text-gray-700">Add Temple</span>
                             </button>
-                            <button className="flex flex-col items-center justify-center p-6 bg-gray-50 rounded-2xl border border-gray-100 hover:border-blue-200 hover:bg-blue-50 transition-all group">
+                            <button className="flex flex-col items-center justify-center p-6 bg-gray-50 rounded-2xl border border-gray-100 hover:border-info/20 hover:bg-info/5 transition-all group">
                                 <span className="text-2xl mb-2 group-hover:scale-110 transition-transform">👤</span>
                                 <span className="font-bold text-gray-700">Manage Users</span>
                             </button>
-                            <button className="flex flex-col items-center justify-center p-6 bg-gray-50 rounded-2xl border border-gray-100 hover:border-yellow-200 hover:bg-yellow-50 transition-all group">
+                            <button className="flex flex-col items-center justify-center p-6 bg-gray-50 rounded-2xl border border-gray-100 hover:border-warning/20 hover:bg-warning/5 transition-all group">
                                 <span className="text-2xl mb-2 group-hover:scale-110 transition-transform">📅</span>
                                 <span className="font-bold text-gray-700">Festivals</span>
                             </button>
-                            <button className="flex flex-col items-center justify-center p-6 bg-gray-50 rounded-2xl border border-gray-100 hover:border-green-200 hover:bg-green-50 transition-all group">
+                            <button className="flex flex-col items-center justify-center p-6 bg-gray-50 rounded-2xl border border-gray-100 hover:border-success/20 hover:bg-success/5 transition-all group">
                                 <span className="text-2xl mb-2 group-hover:scale-110 transition-transform">📢</span>
                                 <span className="font-bold text-gray-700">Updates</span>
                             </button>

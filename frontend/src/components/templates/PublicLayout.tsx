@@ -7,16 +7,11 @@ interface PublicLayoutProps {
 
 const PublicLayout: React.FC<PublicLayoutProps> = ({ children }) => {
     return (
-        <div className="min-h-screen bg-gray-50 flex flex-col">
+        <div className="min-h-screen text-foreground flex flex-col font-sans selection:bg-primary/30">
             <Header />
-            <main className="flex-grow container mx-auto px-6 py-8">
+            <main className="flex-grow">
                 {children}
             </main>
-            <footer className="bg-white border-t py-8">
-                <div className="container mx-auto px-6 text-center text-gray-500 text-sm">
-                    &copy; {new Date().getFullYear()} TN Temples - Preserving Spiritual Heritage.
-                </div>
-            </footer>
         </div>
     );
 };

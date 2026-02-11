@@ -23,14 +23,14 @@ const Input: React.FC<InputProps> = ({
 }) => {
     return (
         <div className={`flex flex-col gap-1 ${className}`}>
-            {label && <label className="text-sm font-semibold text-gray-700">{label}</label>}
+            {label && <label className="text-sm font-semibold text-muted-foreground ml-1">{label}</label>}
             <input
                 type={type}
                 placeholder={placeholder}
                 value={value}
                 onChange={onChange}
-                className={`px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 ${error ? 'border-red-500' : 'border-gray-300'
-                    }`}
+                className={`px-5 py-3 bg-secondary-bg border rounded-2xl focus:outline-none focus:ring-2 focus:ring-accent/50 backdrop-blur-md transition-all ${error ? 'border-red-500/50' : 'border-border hover:border-accent/50'
+                    } text-foreground placeholder:text-muted-foreground`}
             />
             {error && <span className="text-xs text-red-500">{error}</span>}
         </div>
