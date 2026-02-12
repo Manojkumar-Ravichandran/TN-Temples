@@ -7,6 +7,7 @@ import Button from '@/components/atoms/Button';
 import Input from '@/components/atoms/Input';
 
 import Link from 'next/link';
+import { MapPin } from 'lucide-react';
 import Footer from '@/components/organisms/Footer';
 
 export default function Home() {
@@ -21,7 +22,7 @@ export default function Home() {
         </div>
 
         <div className="relative z-10 text-center max-w-8xl mx-auto">
-          <h1 className="text-5xl md:text-8xl font-black text-foreground mb-6 tracking-tighter leading-[0.9]">
+          <h1 className="text-5xl md:text-7xl font-black text-foreground mb-6 tracking-tighter leading-[0.9]">
             Discover the Divine Heritage <br />
             of <span className="text-orange-gradient">Tamil Nadu</span>
           </h1>
@@ -66,66 +67,62 @@ export default function Home() {
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <Card
-              title="Meenakshi Amman Temple"
-              image="https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&q=80&w=1000"
-              className="h-[450px]"
-            >
-              <div className="flex flex-col gap-2">
-                <span className="text-primary font-bold text-[10px] uppercase tracking-widest">Madurai</span>
-                <p className="text-xs text-muted-foreground">Temple City • Spiritual Capital of Tamil Nadu</p>
-                <div className="flex items-center gap-1 mt-2">
-                  <span role="img" aria-label="location" className="text-primary">📍</span>
-                  <span className="text-[10px] text-muted-foreground">Madurai District</span>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 max-w-8xl mx-auto">
+            <Link href="/temple/meenakshi-amman-temple">
+              <Card
+                title="Meenakshi Amman Temple"
+                tag="Madurai"
+                image="https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&q=80&w=1000"
+                className="h-[500px]"
+              >
+                <div className="flex items-center gap-2">
+                  <MapPin size={14} className="text-primary fill-primary" strokeWidth={3} />
+                  <span>Temple City</span>
                 </div>
-              </div>
-            </Card>
+              </Card>
+            </Link>
 
-            <Card
-              title="Brihadeeswarar Temple"
-              image="https://images.unsplash.com/photo-1621319330248-6a566f1030e4?auto=format&fit=crop&q=80&w=1000"
-              className="h-[450px]"
-            >
-              <div className="flex flex-col gap-2">
-                <span className="text-primary font-bold text-[10px] uppercase tracking-widest">Thanjavur</span>
-                <p className="text-xs text-muted-foreground">The Great Living Chola Temple • UNESCO Heritage</p>
-                <div className="flex items-center gap-1 mt-2">
-                  <span role="img" aria-label="location" className="text-primary">📍</span>
-                  <span className="text-[10px] text-muted-foreground">Great Living Chola Temples</span>
+            <Link href="/temple/brihadeeswarar-temple">
+              <Card
+                title="Brihadeeswarar Temple"
+                tag="Thanjavur"
+                image="https://images.unsplash.com/photo-1621319011735-275bc217fc44?auto=format&fit=crop&q=80&w=1000"
+                className="h-[500px]"
+              >
+                <div className="flex items-center gap-2">
+                  <MapPin size={14} className="text-primary fill-primary" strokeWidth={3} />
+                  <span>Great Living Chola Temples</span>
                 </div>
-              </div>
-            </Card>
+              </Card>
+            </Link>
 
-            <Card
-              title="Ramanathaswamy Temple"
-              image="https://images.unsplash.com/photo-1608659597669-b4551172ebf6?auto=format&fit=crop&q=80&w=1000"
-              className="h-[450px]"
-            >
-              <div className="flex flex-col gap-2">
-                <span className="text-primary font-bold text-[10px] uppercase tracking-widest">Rameswaram</span>
-                <p className="text-xs text-muted-foreground">Char Dham Pilgrimage • Longest Corridors</p>
-                <div className="flex items-center gap-1 mt-2">
-                  <span role="img" aria-label="location" className="text-primary">📍</span>
-                  <span className="text-[10px] text-muted-foreground">Char Dham Pilgrimage</span>
+            <Link href="/temple/ramanathaswamy-temple">
+              <Card
+                title="Ramanathaswamy Temple"
+                tag="Rameswaram"
+                image="https://images.unsplash.com/photo-1625505826533-5c80aca7d138?auto=format&fit=crop&q=80&w=1000"
+                className="h-[500px]"
+              >
+                <div className="flex items-center gap-2">
+                  <MapPin size={14} className="text-primary fill-primary" strokeWidth={3} />
+                  <span>Char Dham Pilgrimage</span>
                 </div>
-              </div>
-            </Card>
+              </Card>
+            </Link>
 
-            <Card
-              title="Shore Temple"
-              image="https://images.unsplash.com/photo-1627844718626-4a6b963baacf?auto=format&fit=crop&q=80&w=1000"
-              className="h-[450px]"
-            >
-              <div className="flex flex-col gap-2">
-                <span className="text-primary font-bold text-[10px] uppercase tracking-widest">Mahabalipuram</span>
-                <p className="text-xs text-muted-foreground">Pallava Architecture • UNESCO World Heritage Site</p>
-                <div className="flex items-center gap-1 mt-2">
-                  <span role="img" aria-label="location" className="text-primary">📍</span>
-                  <span className="text-[10px] text-muted-foreground">UNESCO World Heritage</span>
+            <Link href="/temple/shore-temple">
+              <Card
+                title="Shore Temple"
+                tag="Mahabalipuram"
+                image="https://images.unsplash.com/photo-1600675281904-67ad10851ecf?auto=format&fit=crop&q=80&w=1000"
+                className="h-[500px]"
+              >
+                <div className="flex items-center gap-2">
+                  <MapPin size={14} className="text-primary fill-primary" strokeWidth={3} />
+                  <span>UNESCO World Heritage</span>
                 </div>
-              </div>
-            </Card>
+              </Card>
+            </Link>
           </div>
         </section>
 
