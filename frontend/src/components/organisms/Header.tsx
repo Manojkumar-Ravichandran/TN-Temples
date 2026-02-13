@@ -3,22 +3,38 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useTheme } from 'next-themes';
-import { Sun, Moon, Monitor, Menu, X } from 'lucide-react';
+import { Sun, Moon, Monitor, Menu, X, LogIn, User, LogOut } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 const Header: React.FC = () => {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [isProfileOpen, setIsProfileOpen] = useState(false);
+    const [user, setUser] = useState<any>(null);
     const { theme, resolvedTheme, setTheme } = useTheme();
     const [mounted, setMounted] = useState(false);
+    const router = useRouter();
 
     useEffect(() => {
         setMounted(true);
+        const storedUser = localStorage.getItem('user');
+        if (storedUser) {
+            setUser(JSON.parse(storedUser));
+        }
+
         const handleScroll = () => {
             setIsScrolled(window.scrollY > 20);
         };
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
+
+    const handleLogout = () => {
+        localStorage.removeItem('user');
+        setUser(null);
+        setIsProfileOpen(false);
+        router.push('/');
+    };
 
     const toggleTheme = () => {
         if (theme === 'system') setTheme('dark');
@@ -79,8 +95,68 @@ const Header: React.FC = () => {
                         <span className="text-xl">🔍</span>
                     </button>
 
-                    <div className="w-10 h-10 rounded-full border border-border flex items-center justify-center bg-secondary-bg cursor-pointer hover:bg-accent/10 transition-colors overflow-hidden sm:flex hidden">
-                        <span className="text-muted-foreground text-lg">👤</span>
+                    <div className="relative hidden sm:block">
+                        <button
+                            onClick={() => setIsProfileOpen(!isProfileOpen)}
+                            className="w-10 h-10 rounded-full border border-border flex items-center justify-center bg-secondary-bg cursor-pointer hover:bg-accent/10 transition-colors overflow-hidden"
+                            aria-label="Profile menu"
+                        >
+                            <span className="text-muted-foreground text-lg">👤</span>
+                        </button>
+
+                        {/* Profile Popup */}
+                        {isProfileOpen && (
+                            <>
+                                <div
+                                    className="fixed inset-0 z-40"
+                                    onClick={() => setIsProfileOpen(false)}
+                                />
+                                <div className="absolute right-0 mt-3 w-56 bg-background rounded-2xl border border-border shadow-2xl p-2 z-50 animate-in fade-in zoom-in-95 duration-200 origin-top-right">
+                                    <div className="px-4 py-3 border-b border-border mb-2">
+                                        <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest">Logged in as</p>
+                                        <p className="text-sm font-bold text-foreground mt-1">{user?.name || 'Guest User'}</p>
+                                    </div>
+                                    {!user ? (
+                                        <>
+                                            <Link
+                                                href="/login"
+                                                onClick={() => setIsProfileOpen(false)}
+                                                className="flex items-center gap-3 w-full px-4 py-3 text-sm font-bold text-foreground hover:bg-primary hover:text-white rounded-xl transition-all"
+                                            >
+                                                <LogIn size={18} />
+                                                Login to Portal
+                                            </Link>
+                                            <Link
+                                                href="/request-contributor"
+                                                onClick={() => setIsProfileOpen(false)}
+                                                className="flex items-center gap-3 w-full px-4 py-3 text-sm font-bold text-foreground hover:bg-accent/10 rounded-xl transition-all"
+                                            >
+                                                <User size={18} />
+                                                Request Access
+                                            </Link>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Link
+                                                href={user.role === 'Admin' ? '/admin' : '/dashboard'}
+                                                onClick={() => setIsProfileOpen(false)}
+                                                className="flex items-center gap-3 w-full px-4 py-3 text-sm font-bold text-foreground hover:bg-white/5 rounded-xl transition-all"
+                                            >
+                                                <User size={18} />
+                                                My Dashboard
+                                            </Link>
+                                            <button
+                                                onClick={handleLogout}
+                                                className="flex items-center gap-3 w-full px-4 py-3 text-sm font-bold text-red-500 hover:bg-red-500/5 rounded-xl transition-all"
+                                            >
+                                                <LogOut size={18} />
+                                                Logout
+                                            </button>
+                                        </>
+                                    )}
+                                </div>
+                            </>
+                        )}
                     </div>
 
                     {/* Mobile Menu Toggle */}
@@ -131,7 +207,14 @@ const Header: React.FC = () => {
                                 <button className="text-muted-foreground hover:text-foreground transition-colors">
                                     <span className="text-2xl">🔍 Search</span>
                                 </button>
-                                <button className="text-muted-foreground hover:text-foreground transition-colors">
+                                <button
+                                    onClick={() => {
+                                        setIsMobileMenuOpen(false);
+                                        // You could also open a mobile-specific profile menu or redirect to login
+                                        window.location.href = '/login';
+                                    }}
+                                    className="text-muted-foreground hover:text-foreground transition-colors"
+                                >
                                     <span className="text-2xl">👤 Profile</span>
                                 </button>
                             </div>
