@@ -22,9 +22,17 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children, role }) => 
         setMounted(true);
         const storedUser = localStorage.getItem('user');
         if (storedUser) {
-            setUser(JSON.parse(storedUser));
+            const parsedUser = JSON.parse(storedUser);
+            setUser(parsedUser);
+
+            // Role protection
+            if (parsedUser.role !== role) {
+                router.push(parsedUser.role === 'Admin' ? '/admin' : '/dashboard');
+            }
+        } else {
+            router.push('/login');
         }
-    }, []);
+    }, [role, router]);
 
     const toggleTheme = () => {
         if (theme === 'system') setTheme('dark');
@@ -44,10 +52,10 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children, role }) => 
             <Sidebar role={role} />
             <div className="flex-1 flex flex-col min-w-0">
                 <header className="bg-background/80 border-b border-border py-4 px-8 flex justify-between items-center h-20 backdrop-blur-md sticky top-0 z-40 transition-colors">
-                    <div className="flex items-center gap-2 text-sm font-bold text-gray-500">
+                    <div className="flex items-center gap-2 text-sm font-bold text-muted-foreground">
                         <span>Internal</span>
-                        <span className="text-gray-700">›</span>
-                        <span className="text-white">Dashboard</span>
+                        <span className="opacity-30">›</span>
+                        <span className="text-foreground">Dashboard</span>
                     </div>
 
                     <div className="flex-1 max-w-xl mx-8">

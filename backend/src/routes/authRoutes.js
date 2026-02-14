@@ -52,4 +52,41 @@ router.get('/me', protect, async (req, res) => {
     }
 });
 
+// @desc    Register a new user
+// @route   POST /api/v1/auth/register
+// @access  Public (for now, should be restricted to Admin later)
+router.post('/register', async (req, res) => {
+    const { name, email, password, role, district } = req.body;
+
+    try {
+        const userExists = await User.findOne({ email });
+
+        if (userExists) {
+            return res.status(400).json({ message: 'User already exists' });
+        }
+
+        const user = await User.create({
+            name,
+            email,
+            password,
+            role: role || 'Contributor',
+            district
+        });
+
+        if (user) {
+            res.status(201).json({
+                _id: user._id,
+                name: user.name,
+                email: user.email,
+                role: user.role,
+                token: generateToken(user._id),
+            });
+        } else {
+            res.status(400).json({ message: 'Invalid user data' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
 module.exports = router;
