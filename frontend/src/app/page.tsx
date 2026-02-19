@@ -1,16 +1,57 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PublicLayout from '@/components/templates/PublicLayout';
 import Card from '@/components/atoms/Card';
 import Button from '@/components/atoms/Button';
 import Input from '@/components/atoms/Input';
 
 import Link from 'next/link';
-import { MapPin } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { MapPin, Search as SearchIcon, Loader2 } from 'lucide-react';
 import Footer from '@/components/organisms/Footer';
 
+interface Temple {
+  _id: string;
+  name: string;
+  district: string;
+  deity: string;
+  images: string[];
+  slug: string;
+}
+
 export default function Home() {
+  const [temples, setTemples] = useState<Temple[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  useEffect(() => {
+    const fetchTemples = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/v1/temples?limit=8');
+        const data = await response.json();
+        if (response.ok) {
+          setTemples(data.temples);
+        }
+      } catch (error) {
+        console.error('Error fetching temples:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTemples();
+  }, []);
+
+  const router = useRouter();
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      router.push(`/temples?q=${encodeURIComponent(searchQuery)}`);
+    }
+  };
+
   return (
     <PublicLayout>
       {/* Hero Section */}
@@ -31,24 +72,26 @@ export default function Home() {
             across the spiritual heartland of the South.
           </p>
 
-          <div className="max-w-2xl mx-auto mb-8 relative px-4 sm:px-0">
+          <form onSubmit={handleSearch} className="max-w-2xl mx-auto mb-8 relative px-4 sm:px-0">
             <div className="absolute inset-y-0 left-8 sm:left-6 flex items-center pointer-events-none">
-              <span role="img" aria-label="search" className="text-muted-foreground text-xl">🔍</span>
+              <SearchIcon size={20} className="text-muted-foreground" />
             </div>
             <input
               type="text"
               placeholder="Temple Name, District..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full bg-secondary-bg/50 border border-border rounded-2xl py-5 pl-16 pr-4 sm:pr-32 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all backdrop-blur-xl"
             />
-            <button className="mt-4 sm:mt-0 sm:absolute sm:right-2 sm:top-2 sm:bottom-2 w-full sm:w-auto bg-primary hover:bg-primary/90 text-white font-black py-4 sm:py-0 px-8 rounded-xl transition-all shadow-lg active:scale-95">
+            <button type="submit" className="mt-4 sm:mt-0 sm:absolute sm:right-2 sm:top-2 sm:bottom-2 w-full sm:w-auto bg-primary hover:bg-primary/90 text-white font-black py-4 sm:py-0 px-8 rounded-xl transition-all shadow-lg active:scale-95">
               Search
             </button>
-          </div>
+          </form>
 
           <div className="flex flex-wrap justify-center gap-4 text-sm px-6">
-            <span className="text-muted-foreground font-bold uppercase tracking-widest text-[10px]">Trending:</span>
+            <span className="text-muted-foreground font-black uppercase tracking-widest text-[10px]">Trending:</span>
             {['Meenakshi Amman', 'Brihadeeswarar', 'Tiruchendur Murugan'].map((tag) => (
-              <Link key={tag} href="#" className="text-muted-foreground hover:text-foreground transition-colors underline underline-offset-4 decoration-border">{tag}</Link>
+              <Link key={tag} href={`/temple/${tag.toLowerCase().replace(/ /g, '-')}`} className="text-muted-foreground hover:text-foreground transition-colors underline underline-offset-4 decoration-border font-bold">{tag}</Link>
             ))}
           </div>
         </div>
@@ -60,70 +103,42 @@ export default function Home() {
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-12 gap-6">
             <div>
               <h2 className="text-3xl md:text-4xl font-black text-foreground mb-2 tracking-tight">Featured Temples</h2>
-              <p className="text-primary font-bold text-sm uppercase tracking-widest">Timeless wonders of architectural brilliance</p>
+              <p className="text-primary font-black text-xs uppercase tracking-widest">Timeless wonders of architectural brilliance</p>
             </div>
             <Link href="/temples" className="flex items-center gap-2 text-primary font-black hover:gap-3 transition-all">
               View All Temples <span role="img" aria-label="arrow" className="text-xl">→</span>
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 max-w-8xl mx-auto">
-            <Link href="/temple/meenakshi-amman-temple">
-              <Card
-                title="Meenakshi Amman Temple"
-                tag="Madurai"
-                image="https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&q=80&w=1000"
-                className="h-[500px]"
-              >
-                <div className="flex items-center gap-2">
-                  <MapPin size={14} className="text-primary fill-primary" strokeWidth={3} />
-                  <span>Temple City</span>
-                </div>
-              </Card>
-            </Link>
+          {loading ? (
+            <div className="flex items-center justify-center py-20">
+              <Loader2 className="w-8 h-8 text-primary animate-spin" />
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 max-w-8xl mx-auto">
+              {temples.map((temple) => (
+                <Link key={temple._id} href={`/temple/${temple.slug}`}>
+                  <Card
+                    title={temple.name}
+                    tag={temple.district}
+                    image={temple.images[0] || 'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&q=80&w=1000'}
+                    className="h-[500px]"
+                  >
+                    <div className="flex items-center gap-2">
+                      <MapPin size={14} className="text-primary fill-primary" strokeWidth={3} />
+                      <span className="font-bold text-xs">{temple.deity}</span>
+                    </div>
+                  </Card>
+                </Link>
+              ))}
 
-            <Link href="/temple/brihadeeswarar-temple">
-              <Card
-                title="Brihadeeswarar Temple"
-                tag="Thanjavur"
-                image="https://images.unsplash.com/photo-1621319011735-275bc217fc44?auto=format&fit=crop&q=80&w=1000"
-                className="h-[500px]"
-              >
-                <div className="flex items-center gap-2">
-                  <MapPin size={14} className="text-primary fill-primary" strokeWidth={3} />
-                  <span>Great Living Chola Temples</span>
+              {temples.length === 0 && (
+                <div className="col-span-full text-center py-20 bg-secondary-bg/30 rounded-[3rem] border border-border border-dashed">
+                  <p className="text-muted-foreground font-bold italic">No temples found in our divine records yet.</p>
                 </div>
-              </Card>
-            </Link>
-
-            <Link href="/temple/ramanathaswamy-temple">
-              <Card
-                title="Ramanathaswamy Temple"
-                tag="Rameswaram"
-                image="https://images.unsplash.com/photo-1625505826533-5c80aca7d138?auto=format&fit=crop&q=80&w=1000"
-                className="h-[500px]"
-              >
-                <div className="flex items-center gap-2">
-                  <MapPin size={14} className="text-primary fill-primary" strokeWidth={3} />
-                  <span>Char Dham Pilgrimage</span>
-                </div>
-              </Card>
-            </Link>
-
-            <Link href="/temple/shore-temple">
-              <Card
-                title="Shore Temple"
-                tag="Mahabalipuram"
-                image="https://images.unsplash.com/photo-1600675281904-67ad10851ecf?auto=format&fit=crop&q=80&w=1000"
-                className="h-[500px]"
-              >
-                <div className="flex items-center gap-2">
-                  <MapPin size={14} className="text-primary fill-primary" strokeWidth={3} />
-                  <span>UNESCO World Heritage</span>
-                </div>
-              </Card>
-            </Link>
-          </div>
+              )}
+            </div>
+          )}
         </section>
 
         {/* Sacred Festivals Section */}
@@ -140,15 +155,15 @@ export default function Home() {
                 <span className="px-3 py-1 bg-primary/10 text-primary text-[10px] font-black uppercase tracking-widest rounded-full border border-primary/20">Today</span>
                 <span role="img" aria-label="celebration" className="text-primary text-xl font-bold italic">🎊</span>
               </div>
-              <h3 className="text-2xl font-bold text-foreground mb-4 group-hover:text-primary transition-colors">Panguni Uthiram</h3>
-              <p className="text-muted-foreground text-sm leading-relaxed mb-8">
+              <h3 className="text-2xl font-black text-foreground mb-4 group-hover:text-primary transition-colors">Panguni Uthiram</h3>
+              <p className="text-muted-foreground text-sm font-bold leading-relaxed mb-8">
                 Celebrated in the month of Panguni, signifying the marriage of Lord Shiva and Goddess Parvati.
               </p>
               <div className="flex items-center gap-3 pt-6 border-t border-border">
                 <div className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center">
                   <span role="img" aria-label="temple" className="text-primary text-sm font-bold">🏛️</span>
                 </div>
-                <span className="text-xs text-muted-foreground font-medium">Majority of Palani & Mylapore</span>
+                <span className="text-xs text-muted-foreground font-black">Majority of Palani & Mylapore</span>
               </div>
             </div>
 
@@ -157,15 +172,15 @@ export default function Home() {
                 <span className="px-3 py-1 bg-background/50 text-muted-foreground text-[10px] font-black uppercase tracking-widest rounded-full border border-border">Tomorrow</span>
                 <span role="img" aria-label="calendar" className="text-muted-foreground text-xl">📅</span>
               </div>
-              <h3 className="text-2xl font-bold text-foreground mb-4 group-hover:text-primary transition-colors">Chithirai Thiruvizha</h3>
-              <p className="text-muted-foreground text-sm leading-relaxed mb-8">
+              <h3 className="text-2xl font-black text-foreground mb-4 group-hover:text-primary transition-colors">Chithirai Thiruvizha</h3>
+              <p className="text-muted-foreground text-sm font-bold leading-relaxed mb-8">
                 The grand celebration of Madurai, marking the celestial wedding of Meenakshi Amman.
               </p>
               <div className="flex items-center gap-3 pt-6 border-t border-border">
                 <div className="w-8 h-8 rounded-lg bg-background/50 flex items-center justify-center">
                   <span role="img" aria-label="temple" className="text-muted-foreground text-sm font-bold">🏛️</span>
                 </div>
-                <span className="text-xs text-muted-foreground font-medium">Madurai District</span>
+                <span className="text-xs text-muted-foreground font-black">Madurai District</span>
               </div>
             </div>
 
@@ -174,37 +189,37 @@ export default function Home() {
                 <span className="px-3 py-1 bg-background/50 text-muted-foreground text-[10px] font-black uppercase tracking-widest rounded-full border border-border">Upcoming</span>
                 <span role="img" aria-label="wave" className="text-muted-foreground text-xl">🌊</span>
               </div>
-              <h3 className="text-2xl font-bold text-foreground mb-4 group-hover:text-primary transition-colors">Aadi Perukku</h3>
-              <p className="text-muted-foreground text-sm leading-relaxed mb-8">
+              <h3 className="text-2xl font-black text-foreground mb-4 group-hover:text-primary transition-colors">Aadi Perukku</h3>
+              <p className="text-muted-foreground text-sm font-bold leading-relaxed mb-8">
                 Festival of prosperity, celebrating the monsoon season and rising water levels.
               </p>
               <div className="flex items-center gap-3 pt-6 border-t border-border">
                 <div className="w-8 h-8 rounded-lg bg-background/50 flex items-center justify-center">
                   <span role="img" aria-label="temple" className="text-muted-foreground text-sm font-bold">🏛️</span>
                 </div>
-                <span className="text-xs text-muted-foreground font-medium">River Kaveri Banks</span>
+                <span className="text-xs text-muted-foreground font-black">River Kaveri Banks</span>
               </div>
             </div>
           </div>
         </section>
 
         {/* Nearby Banner */}
-        <section className="relative p-8 md:p-20 rounded-[40px] overflow-hidden">
+        <section className="relative p-8 md:p-20 rounded-[40px] overflow-hidden shadow-2xl">
           <div className="absolute inset-0 orange-gradient opacity-90" />
           <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-20" />
 
           <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-12 text-center lg:text-left">
             <div className="max-w-xl">
               <h2 className="text-4xl md:text-5xl font-black text-white mb-6 tracking-tight">Find Temples Near You</h2>
-              <p className="text-white/80 text-lg leading-relaxed mb-10">
+              <p className="text-white/80 text-lg font-bold leading-relaxed mb-10">
                 Enable location access to discover hidden spiritual gems and ancient architecture within your immediate vicinity.
               </p>
               <div className="flex flex-col sm:flex-row flex-wrap gap-4 justify-center lg:justify-start">
-                <button className="flex items-center justify-center gap-2 bg-white text-primary font-black px-8 py-4 rounded-2xl hover:bg-orange-50 transition-all shadow-xl active:scale-95">
+                <button className="flex items-center justify-center gap-2 bg-white text-primary font-black px-8 py-4 rounded-2xl hover:bg-orange-50 transition-all shadow-xl active:scale-95 text-sm uppercase tracking-widest">
                   <span role="img" aria-label="location" className="text-xl">📍</span>
-                  Use My Current Location
+                  Use Current Location
                 </button>
-                <button className="bg-black/20 hover:bg-black/30 border border-white/20 text-white font-black px-8 py-4 rounded-2xl transition-all active:scale-95">
+                <button className="bg-black/20 hover:bg-black/30 border border-white/20 text-white font-black px-8 py-4 rounded-2xl transition-all active:scale-95 text-sm uppercase tracking-widest">
                   Enter Pin Code
                 </button>
               </div>

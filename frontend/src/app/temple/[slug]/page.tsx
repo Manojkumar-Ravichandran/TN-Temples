@@ -1,57 +1,113 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PublicLayout from '@/components/templates/PublicLayout';
 import TempleHero from '@/components/organisms/TempleHero';
 import TempleHistory from '@/components/organisms/TempleHistory';
 import PoojaSchedule from '@/components/organisms/PoojaSchedule';
 import TempleGallery from '@/components/organisms/TempleGallery';
 import TempleMap from '@/components/organisms/TempleMap';
+import { Loader2, AlertCircle } from 'lucide-react';
 import {
     FestivalsSidebar,
     NearbyTemplesSidebar,
     PlanVisitCTA
 } from '@/components/molecules/SidebarComponents';
 
-const TempleDetail = ({ params }: { params: { slug: string } }) => {
-    // Extensive dummy data matching the provided design
-    const temple = {
-        name: 'Meenakshi Amman Temple',
-        slug: 'meenakshi-amman-temple',
-        description: 'An architectural masterpiece dedicated to Goddess Meenakshi and Lord Sundareswarar in the heart of the temple city, Madurai.',
-        district: 'Madurai',
-        tags: ['UNESCO Heritage', 'Active Site'],
-        history: [
-            'The Meenakshi Amman Temple dates back to the early centuries of the Common Era, though most of its present structure was built during the reign of the Nayak dynasty between the 16th and 18th centuries. Legend states that the temple was founded by Indra, the King of Gods, while he was on a pilgrimage to atone for his misdeeds.',
-            'The complex is a physical representation of the <span class="text-primary font-bold">Dravidian architectural style</span>, featuring 14 massive gopurams (gateway towers), the tallest being the southern tower which rises to over 170 feet. The temple is centered around the two primary shrines of Meenakshi and her consort, Lord Sundareswarar.'
-        ],
-        featuredQuote: 'The temple is often cited as a candidate for the New Seven Wonders of the World due to its intricate carvings and spiritual magnetism.',
+interface TempleData {
+    name: string;
+    description: string;
+    district: string;
+    deity: string;
+    images: string[];
+    history?: string;
+    location?: {
+        coordinates: [number, number];
+    };
+}
+
+const TempleDetail = ({ params }: { params: Promise<{ slug: string }> }) => {
+    const { slug } = React.use(params);
+    const [temple, setTemple] = useState<any>(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        const fetchTemple = async () => {
+            try {
+                const response = await fetch(`http://localhost:5000/api/v1/temples/${slug}`);
+                if (!response.ok) {
+                    if (response.status === 404) throw new Error('Temple not found');
+                    throw new Error('Failed to fetch temple data');
+                }
+                const data = await response.json();
+                setTemple(data);
+            } catch (err: any) {
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchTemple();
+    }, [slug]);
+
+    if (loading) {
+        return (
+            <PublicLayout>
+                <div className="min-h-screen flex items-center justify-center bg-background">
+                    <div className="flex flex-col items-center gap-4">
+                        <Loader2 className="w-12 h-12 text-primary animate-spin" />
+                        <p className="text-muted-foreground font-black uppercase tracking-widest text-xs">Loading Temple Details...</p>
+                    </div>
+                </div>
+            </PublicLayout>
+        );
+    }
+
+    if (error || !temple) {
+        return (
+            <PublicLayout>
+                <div className="min-h-screen flex items-center justify-center bg-background">
+                    <div className="bg-secondary-bg border border-border p-12 rounded-[3rem] text-center max-w-lg shadow-2xl">
+                        <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-6" />
+                        <h2 className="text-3xl font-black text-foreground mb-4 tracking-tight">{error || 'Something went wrong'}</h2>
+                        <p className="text-muted-foreground font-bold mb-8 italic">We couldn't find the sacred records for this location.</p>
+                        <button
+                            onClick={() => window.location.href = '/'}
+                            className="bg-primary text-white font-black px-8 py-4 rounded-2xl hover:scale-105 transition-all shadow-xl shadow-primary/20"
+                        >
+                            Back to Home
+                        </button>
+                    </div>
+                </div>
+            </PublicLayout>
+        );
+    }
+
+    // Adapt backend data to frontend structure
+    const formattedTemple = {
+        name: temple.name,
+        description: temple.description,
+        district: temple.district,
+        tags: [temple.deity, 'Sacred Site'],
+        history: temple.history ? [temple.history] : ['History details coming soon...'],
+        featuredQuote: `Dedicated to ${temple.deity} in the heart of ${temple.district}.`,
         rituals: [
-            { name: 'Thiruvananthal Pooja', time: '05:00 AM - 06:00 AM', significance: 'Early morning awakening ritual' },
-            { name: 'Kaasandhi Pooja', time: '06:30 AM - 07:15 AM', significance: 'Morning prayers & offerings' },
-            { name: 'Uchikala Pooja', time: '10:30 AM - 11:15 AM', significance: 'Mid-day ritual' },
-            { name: 'Sayarakshai Pooja', time: '04:30 PM - 05:15 PM', significance: 'Evening lighting ceremony' },
-            { name: 'Palliarai Pooja', time: '09:30 PM - 10:00 PM', significance: 'Closing nightly procession' }
+            { name: 'Morning Pooja', time: '06:00 AM', significance: 'Auspicious start' },
+            { name: 'Evening Pooja', time: '06:00 PM', significance: 'Divinity at dusk' }
         ],
-        images: [
-            'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=2070&auto=format&fit=crop', // Main
-            'https://images.unsplash.com/photo-1621319011735-275bc217fc44?q=80&w=2070&auto=format&fit=crop', // Gallery 1
-            'https://images.unsplash.com/photo-1625505826533-5c80aca7d138?q=80&w=2069&auto=format&fit=crop', // Gallery 2
-            'https://images.unsplash.com/photo-1600675281904-67ad10851ecf?q=80&w=2070&auto=format&fit=crop', // Gallery 3
-            'https://images.unsplash.com/photo-1619441207978-3d326c46e2c9?q=80&w=2069&auto=format&fit=crop', // Gallery 4
+        images: temple.images && temple.images.length > 0 ? temple.images : [
+            'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=2070&auto=format&fit=crop'
         ],
-        totalPhotos: 124,
-        address: 'Madurai Main, Tamil Nadu 625001',
-        coordinates: { lat: 9.9195, lng: 78.1193 },
-        festivals: [
-            { name: 'Chithirai Festival', date: 'APR 14', description: '12-day celestial wedding celebration', isHighlight: true },
-            { name: 'Navaratri Festival', date: 'OCT 24', description: 'Golu display and classical concerts' }
-        ],
-        nearbyTemples: [
-            { name: 'Koodal Azhagar Temple', distance: '1.2 km away', image: 'https://images.unsplash.com/photo-1600675281904-67ad10851ecf?q=80&w=100' },
-            { name: 'Thiruparankundram', distance: '8.5 km away', image: 'https://images.unsplash.com/photo-1625505826533-5c80aca7d138?q=80&w=100' },
-            { name: 'Alagar Koyil', distance: '21 km away', image: 'https://images.unsplash.com/photo-1621319011735-275bc217fc44?q=80&w=100' }
-        ]
+        totalPhotos: temple.images?.length || 0,
+        address: `${temple.district}, Tamil Nadu`,
+        coordinates: temple.location?.coordinates ? {
+            lat: temple.location.coordinates[1],
+            lng: temple.location.coordinates[0]
+        } : { lat: 0, lng: 0 },
+        festivals: [],
+        nearbyTemples: []
     };
 
     return (
@@ -59,22 +115,18 @@ const TempleDetail = ({ params }: { params: { slug: string } }) => {
             <div className="bg-background pt-24 pb-16">
                 <div className="container mx-auto px-6">
                     {/* Breadcrumb */}
-                    <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground mb-8">
-                        <span className="hover:text-primary cursor-pointer transition-colors">Home</span>
+                    <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-8">
+                        <span onClick={() => window.location.href = '/'} className="hover:text-primary cursor-pointer transition-colors">Home</span>
                         <span className="text-primary/30">/</span>
-                        <span className="hover:text-primary cursor-pointer transition-colors">Districts</span>
-                        <span className="text-primary/30">/</span>
-                        <span className="hover:text-primary cursor-pointer transition-colors">{temple.district}</span>
-                        <span className="text-primary/30">/</span>
-                        <span className="text-primary">{temple.name}</span>
+                        <span className="text-primary">{formattedTemple.name}</span>
                     </div>
 
                     {/* Hero Section */}
                     <TempleHero
-                        name={temple.name}
-                        description={temple.description}
-                        image={temple.images[0]}
-                        tags={temple.tags}
+                        name={formattedTemple.name}
+                        description={formattedTemple.description}
+                        image={formattedTemple.images[0]}
+                        tags={formattedTemple.tags}
                     />
 
                     {/* Content Grid */}
@@ -82,34 +134,34 @@ const TempleDetail = ({ params }: { params: { slug: string } }) => {
                         {/* Left Column: Main Content */}
                         <div className="lg:col-span-8">
                             <TempleHistory
-                                history={temple.history}
-                                featuredQuote={temple.featuredQuote}
+                                history={formattedTemple.history}
+                                featuredQuote={formattedTemple.featuredQuote}
                             />
 
                             <hr className="border-border my-8" />
 
-                            <PoojaSchedule rituals={temple.rituals} />
+                            <PoojaSchedule rituals={formattedTemple.rituals} />
 
                             <hr className="border-border my-8" />
 
                             <TempleGallery
-                                images={temple.images}
-                                totalPhotos={temple.totalPhotos}
+                                images={formattedTemple.images}
+                                totalPhotos={formattedTemple.totalPhotos}
                             />
 
                             <hr className="border-border my-8" />
 
-                            <TempleMap
-                                name={temple.name}
-                                address={temple.address}
-                                coordinates={temple.coordinates}
-                            />
+                            {formattedTemple.coordinates.lat !== 0 && (
+                                <TempleMap
+                                    name={formattedTemple.name}
+                                    address={formattedTemple.address}
+                                    coordinates={formattedTemple.coordinates}
+                                />
+                            )}
                         </div>
 
                         {/* Right Column: Sidebar */}
                         <div className="lg:col-span-4 space-y-8">
-                            <FestivalsSidebar festivals={temple.festivals} />
-                            <NearbyTemplesSidebar temples={temple.nearbyTemples} />
                             <PlanVisitCTA />
                         </div>
                     </div>

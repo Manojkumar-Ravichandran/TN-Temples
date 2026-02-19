@@ -12,6 +12,7 @@ const submissionSchema = new mongoose.Schema({
         },
         timings: { morning: String, evening: String },
         history: String,
+        description: String,
         images: [String],
     },
     contributor: {
